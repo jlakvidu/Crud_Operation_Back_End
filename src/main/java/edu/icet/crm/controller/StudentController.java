@@ -4,6 +4,7 @@ import edu.icet.crm.model.Student;
 import edu.icet.crm.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +41,13 @@ public class StudentController {
     }
 
     @GetMapping("/find-by-id/{id}")
-    public Optional<Student> findStudentById(@PathVariable Integer id) {
-        return service.findStudentById(id);
+    public ResponseEntity<Student> findStudentById(@PathVariable Integer id) {
+        Optional<Student> studentOptional = service.findStudentById(id);
+        if (studentOptional.isPresent()) {
+            return ResponseEntity.ok(studentOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 }
